@@ -26,9 +26,9 @@ import (
 	"os"
 	"time"
 
-	"git.woa.com/bk-gse/bk-gse-sdk/internal"
-	serverapi "git.woa.com/bk-gse/bk-gse-sdk/service/server-api"
-	"git.woa.com/bk-gse/bk-gse-sdk/types"
+	"github.com/TencentBlueKing/bk-gse-sdk/go/internal"
+	serverapi "github.com/TencentBlueKing/bk-gse-sdk/go/service/server-api"
+	"github.com/TencentBlueKing/bk-gse-sdk/go/types"
 )
 
 const (

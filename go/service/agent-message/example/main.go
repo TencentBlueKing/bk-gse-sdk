@@ -24,9 +24,9 @@ import (
 	"strconv"
 	"time"
 
-	"git.woa.com/bk-gse/bk-gse-sdk/internal"
-	agentmessage "git.woa.com/bk-gse/bk-gse-sdk/service/agent-message"
-	"git.woa.com/bk-gse/bk-gse-sdk/types"
+	"github.com/TencentBlueKing/bk-gse-sdk/go/internal"
+	agentmessage "github.com/TencentBlueKing/bk-gse-sdk/go/service/agent-message"
+	"github.com/TencentBlueKing/bk-gse-sdk/go/types"
 )
 
 const (

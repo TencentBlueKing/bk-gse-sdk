@@ -20,8 +20,8 @@ import (
 	"encoding/json"
 	"errors"
 
-	"git.woa.com/bk-gse/bk-gse-sdk/internal/server"
-	"git.woa.com/bk-gse/bk-gse-sdk/types"
+	"github.com/TencentBlueKing/bk-gse-sdk/go/internal/server"
+	"github.com/TencentBlueKing/bk-gse-sdk/go/types"
 )
 
 // Cluster provides cluster handling methods.

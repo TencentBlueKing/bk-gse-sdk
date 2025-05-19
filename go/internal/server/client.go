@@ -16,7 +16,7 @@
 // Package server provides gse server API processing.
 package server
 
-import "git.woa.com/bk-gse/bk-gse-sdk/internal"
+import "github.com/TencentBlueKing/bk-gse-sdk/go/internal"
 
 // Client provides all handling methods in gse server.
 type Client interface {

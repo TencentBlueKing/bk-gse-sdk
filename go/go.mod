@@ -1,3 +1,3 @@
-module git.woa.com/bk-gse/bk-gse-sdk
+module github.com/TencentBlueKing/bk-gse-sdk/go
 
 go 1.21.13
