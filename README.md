@@ -44,7 +44,7 @@
 - [BK-CMDB](https://github.com/TencentBlueKing/bk-cmdb)：蓝鲸智云配置平台（蓝鲸智云 CMDB）是一个面向资产及应用的企业级配置管理平台。
 - [BK-CI](https://github.com/TencentBlueKing/bk-ci)：蓝鲸智云持续集成平台是一个开源的持续集成和持续交付系统，可以轻松将你的研发流程呈现到你面前。
 - [BK-BCS](https://github.com/TencentBlueKing/bk-bcs)：蓝鲸智云容器管理平台是以容器技术为基础，为微服务业务提供编排管理的基础服务平台。
-- [BK-PaaS](https://github.com/TencentBlueKing/bk-paas)：蓝鲸智云 PaaS 平台是一个开放式的开发平台，让开发者可以方便快捷地创建、开发、部署和管理 SaaS 应用。
+- [BK-PaaS](https://github.com/TencentBlueKing/blueking-paas)：蓝鲸智云 PaaS 平台是一个开放式的开发平台，让开发者可以方便快捷地创建、开发、部署和管理 SaaS 应用。
 - [BK-SOPS](https://github.com/TencentBlueKing/bk-sops)：蓝鲸智云标准运维（SOPS）是通过可视化的图形界面进行任务流程编排和执行的系统，是蓝鲸智云体系中一款轻量级的调度编排类 SaaS 产品。
 
 ## Contributing
