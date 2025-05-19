@@ -19,7 +19,7 @@ import (
 	"errors"
 	"net/http"
 
-	"git.woa.com/bk-gse/bk-gse-sdk/types"
+	"github.com/TencentBlueKing/bk-gse-sdk/go/types"
 )
 
 // NewDefaultConfig creates a default configuration for server service.

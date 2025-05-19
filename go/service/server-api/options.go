@@ -18,8 +18,8 @@ package serverapi
 import (
 	"net/http"
 
-	"git.woa.com/bk-gse/bk-gse-sdk/internal"
-	"git.woa.com/bk-gse/bk-gse-sdk/types"
+	"github.com/TencentBlueKing/bk-gse-sdk/go/internal"
+	"github.com/TencentBlueKing/bk-gse-sdk/go/types"
 )
 
 // OptionFn defines the function type for setting options.

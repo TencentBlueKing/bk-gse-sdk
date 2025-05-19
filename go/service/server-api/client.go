@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"git.woa.com/bk-gse/bk-gse-sdk/internal/server"
+	"github.com/TencentBlueKing/bk-gse-sdk/go/internal/server"
 )
 
 // Client provides all handling methods in gse server.

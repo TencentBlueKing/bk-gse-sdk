@@ -24,9 +24,9 @@ import (
 	"sync/atomic"
 	"time"
 
-	"git.woa.com/bk-gse/bk-gse-sdk/internal"
-	"git.woa.com/bk-gse/bk-gse-sdk/internal/agent"
-	"git.woa.com/bk-gse/bk-gse-sdk/types"
+	"github.com/TencentBlueKing/bk-gse-sdk/go/internal"
+	"github.com/TencentBlueKing/bk-gse-sdk/go/internal/agent"
+	"github.com/TencentBlueKing/bk-gse-sdk/go/types"
 )
 
 // Client provides all handling methods in agent message.

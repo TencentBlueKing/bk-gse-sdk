@@ -26,8 +26,8 @@ SDK提供全套的通信链接管理、上行消息接口函数、下行消息�
 
 ```golang
 import (
-    agentmessage "git.woa.com/bk-gse/bk-gse-sdk/service/agent-message"
-    "git.woa.com/bk-gse/bk-gse-sdk/types"
+    agentmessage "github.com/TencentBlueKing/bk-gse-sdk/go/service/agent-message"
+    "github.com/TencentBlueKing/bk-gse-sdk/go/types"
 )
 
 func main() {
@@ -74,8 +74,8 @@ SDK提供基于APIGateway的GSE Server接口函数，可以下发消息到指定
 
 ```golang
 import (
-    serverapi "git.woa.com/bk-gse/bk-gse-sdk/service/server-api"
-    "git.woa.com/bk-gse/bk-gse-sdk/types"
+    serverapi "github.com/TencentBlueKing/bk-gse-sdk/go/service/server-api"
+    "github.com/TencentBlueKing/bk-gse-sdk/go/types"
 )
 
 func main() {

@@ -18,7 +18,7 @@ package server
 import (
 	"net/http"
 
-	"git.woa.com/bk-gse/bk-gse-sdk/types"
+	"github.com/TencentBlueKing/bk-gse-sdk/go/types"
 )
 
 // Config describes the server http client configuration.
