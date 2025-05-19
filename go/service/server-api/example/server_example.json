@@ -1,0 +1,11 @@
+{
+  "listen_addr": ":8080",
+  "slot_id": 10,
+  "token": "",
+  "app_code": "",
+  "app_secret": "",
+  "gse_base_url": "http://127.0.0.1:8080",
+  "agent_id_list": [
+    "example-agent-id"
+  ]
+}

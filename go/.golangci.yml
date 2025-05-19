@@ -1,0 +1,622 @@
+linters:
+  # Disable all linters.
+  # Default: false
+  disable-all: true
+  # Enable specific linters
+  # https://golangci-lint.run/usage/linters/#enabled-by-default
+  enable:
+    # Check for pass []any as any in variadic func(...any).
+    - asasalint
+    # Checks that all code identifiers does not have non-ASCII symbols in the name.
+    - asciicheck
+    # Checks for dangerous unicode character sequences.
+    - bidichk
+    # Canonicalheader checks whether net/http.Header uses canonical header.
+    - canonicalheader
+    # Check whether the function uses a non-inherited context.
+    - contextcheck
+    # Checks function and package cyclomatic complexity.
+    - cyclop
+    # Check declaration order and count of types, constants, variables and functions.
+    - decorder
+    # Go linter that checks if package imports are in a list of acceptable packages.
+    - dogsled
+    # Checks for duplicate words in the source code.
+    - dupword
+    # Check for two durations multiplied together.
+    - durationcheck
+    # Errcheck is a program for checking for unchecked errors in Go code.
+    - errcheck
+    # Checks types passed to the json encoding functions.
+    - errchkjson
+    # Checks that sentinel errors are prefixed with the `Err` and error types are suffixed with the `Error`.
+    - errname
+    # Check exhaustiveness of enum switch statements.
+    - exhaustive
+    # Detects nested contexts in loops and function literals.
+    - fatcontext
+    # Forbids identifiers.
+    - forbidigo
+    # Finds forced type assertions.
+    - forcetypeassert
+    # Tool for detection of long functions.
+    - funlen
+    # Checks that go compiler directive comments (//go:) are valid.
+    - gocheckcompilerdirectives
+    # Check that no global variables exist.
+    - gochecknoglobals
+    # Checks that no init functions are present in Go code.
+    - gochecknoinits
+    # Run exhaustiveness checks on Go "sum types".
+    - gochecksumtype
+    # Computes and checks the cognitive complexity of functions.
+    - gocognit
+    # Finds repeated strings that could be replaced by a constant.
+    - goconst
+    # Provides diagnostics that check for bugs, performance and style issues.
+    - gocritic
+    # Computes and checks the cyclomatic complexity of functions.
+    - gocyclo
+    # Check if comments end in a period.
+    - godot
+    # Inspects source code for security problems.
+    - gosec
+    # Analyze expression groups.
+    - grouper
+    # Detect the incorrect use of interfaces, helping developers avoid interface pollution.
+    - inamedparam
+    # Detects when assignments to existing variables are not used.
+    - ineffassign
+    # A linter that checks the number of methods inside an interface.
+    - interfacebloat
+    # Reports long lines.
+    - lll
+    # Maintidx measures the maintainability index of each function.
+    - maintidx
+    # Finds commonly misspelled English words.
+    - misspell
+    # Enforces consistent import aliases.
+    - importas
+    # An analyzer to detect magic numbers.
+    - mnd
+    # Enforce field tags in (un)marshaled structs.
+    - musttag
+    # Checks that functions with naked returns are not longer than a maximum size (can be zero).
+    - nakedret
+    # Reports deeply nested if statements.
+    - nestif
+    # Finds the code that returns nil even if it checks that the error is not nil.
+    - nilerr
+    # Checks that there is no simultaneous return of `nil` error and an invalid value.
+    - nilnil
+    # Nlreturn checks for a new line before return and branch statements to increase code clarity.
+    - nlreturn
+    # Reports all named returns.
+    - nonamedreturns
+    # Checks for misuse of Sprintf to construct a host with port in a URL.
+    - nosprintfhostport
+    # Checks that fmt.Sprintf can be replaced with a faster alternative.
+    - perfsprint
+    # Finds slice declarations that could potentially be pre-allocated.
+    - prealloc
+    # Find code that shadows one of Go's predeclared identifiers.
+    - predeclared
+    # Reports direct reads from proto message fields when getters should be used.
+    - protogetter
+    # Checks that package variables are not reassigned.
+    - reassign
+    # Checks for receiver type consistency.
+    - recvcheck
+    # Fast, configurable, extensible, flexible, and beautiful linter for Go.
+    - revive
+    # Checks that sql.Rows, sql.Stmt, sqlx.NamedStmt, pgx.Query are closed.
+    - sqlclosecheck
+    # It's a set of rules from staticcheck.
+    - staticcheck
+    # Stylecheck is a replacement for golint.
+    - stylecheck
+    # Reports unused function parameters.
+    - unparam
+    # Checks Go code for unused constants, variables, functions and types.
+    - unused
+    # A linter that detect the possibility to use variables/constants from the Go standard library.
+    - usestdlibvars
+    # Checks that the length of a variable's name matches its scope.
+    - varnamelen
+    # Finds wasted assignment statements.
+    - wastedassign
+    # Whitespace is a linter that checks for unnecessary newlines at the start and end of functions, if, for, etc.
+    - whitespace
+    # Add or remove empty lines.
+issues:
+  # List of regexps of issue texts to exclude.
+  #
+  # But independently of this option we use default exclude patterns,
+  # it can be disabled by `exclude-use-default: false`.
+  # To list all excluded by default patterns execute `golangci-lint run --help`
+  #
+  # Default: https://golangci-lint.run/usage/false-positives/#default-exclusions
+  exclude:
+    - abcdef
+  # Excluding configuration per-path, per-linter, per-text and per-source
+  exclude-rules:
+    # Exclude some linters from running on tests files.
+    - path: _test\.go
+      linters:
+        - gocyclo
+        - errcheck
+        - gosec
+    # Run some linter only for test files by excluding its issues for everything else.
+    - path-except: _test\.go
+      linters:
+        - forbidigo
+    # Exclude known linters from partially hard-vendored code,
+    # which is impossible to exclude via `nolint` comments.
+    # `/` will be replaced by current OS file path separator to properly work on Windows.
+    - path: internal/hmac/
+      text: "weak cryptographic primitive"
+      linters:
+        - gosec
+    # Exclude some `staticcheck` messages.
+    - linters:
+        - staticcheck
+      text: "SA9003:"
+    # Exclude `lll` issues for long lines with `go:generate`.
+    - linters:
+        - lll
+      source: "^//go:generate "
+  # Independently of option `exclude` we use default exclude patterns,
+  # it can be disabled by this option.
+  # To list all excluded by default patterns execute `golangci-lint run --help`.
+  # Default: true
+  exclude-use-default: false
+  # If set to true, `exclude` and `exclude-rules` regular expressions become case-sensitive.
+  # Default: false
+  exclude-case-sensitive: false
+  # Which dirs to exclude: issues from them won't be reported.
+  # Can use regexp here: `generated.*`, regexp is applied on full path,
+  # including the path prefix if one is set.
+  # Default dirs are skipped independently of this option's value (see exclude-dirs-use-default).
+  # "/" will be replaced by current OS file path separator to properly work on Windows.
+  # Default: []
+  exclude-dirs:
+  # Enables exclude of directories:
+  # - vendor$, third_party$, testdata$, examples$, Godeps$, builtin$
+  # Default: true
+  exclude-dirs-use-default: false
+  # Which files to exclude: they will be analyzed, but issues from them won't be reported.
+  # There is no need to include all autogenerated files,
+  # we confidently recognize autogenerated files.
+  # If it's not, please let us know.
+  # "/" will be replaced by current OS file path separator to properly work on Windows.
+  # Default: []
+  exclude-files:
+    - ".*\\.pb\\.go$"
+  # Mode of the generated files analysis.
+  #
+  # - `strict`: sources are excluded by following strictly the Go generated file convention.
+  #    Source files that have lines matching only the following regular expression will be excluded: `^// Code generated .* DO NOT EDIT\.$`
+  #    This line must appear before the first non-comment, non-blank text in the file.
+  #    https://go.dev/s/generatedcode
+  # - `lax`: sources are excluded if they contain lines `autogenerated file`, `code generated`, `do not edit`, etc.
+  # - `disable`: disable the generated files exclusion.
+  #
+  # Default: lax
+  exclude-generated: strict
+  # The list of ids of default excludes to include or disable.
+  # https://golangci-lint.run/usage/false-positives/#default-exclusions
+  # Default: []
+  include:
+    - EXC0001
+    - EXC0002
+    - EXC0003
+    - EXC0004
+    - EXC0005
+    - EXC0006
+    - EXC0007
+    - EXC0008
+    - EXC0009
+    - EXC0010
+    - EXC0011
+    - EXC0012
+    - EXC0013
+    - EXC0014
+    - EXC0015
+  # Maximum issues count per one linter.
+  # Set to 0 to disable.
+  # Default: 50
+  max-issues-per-linter: 0
+  # Maximum count of issues with the same text.
+  # Set to 0 to disable.
+  # Default: 3
+  max-same-issues: 0
+  # Show only new issues: if there are unstaged changes or untracked files,
+  # only those changes are analyzed, else only changes in HEAD~ are analyzed.
+  # It's a super-useful option for integration of golangci-lint into existing large codebase.
+  # It's not practical to fix all existing issues at the moment of integration:
+  # much better don't allow issues in new code.
+  #
+  # Default: false
+  new: false
+  # Show only new issues created after git revision `REV`.
+  # Default: ""
+  new-from-rev: master
+  # Show issues in any part of update files (requires new-from-rev or new-from-patch).
+  # Default: false
+  whole-files: false
+  # Fix found issues (if it's supported by the linter).
+  # Default: false
+  fix: false
+# output configuration options
+output:
+  # The formats used to render issues.
+  # Formats:
+  # - `colored-line-number`
+  # - `line-number`
+  # - `json`
+  # - `colored-tab`
+  # - `tab`
+  # - `html`
+  # - `checkstyle`
+  # - `code-climate`
+  # - `junit-xml`
+  # - `junit-xml-extended`
+  # - `github-actions`
+  # - `teamcity`
+  # - `sarif`
+  # Output path can be either `stdout`, `stderr` or path to the file to write to.
+  #
+  # For the CLI flag (`--out-format`), multiple formats can be specified by separating them by comma.
+  # The output can be specified for each of them by separating format name and path by colon symbol.
+  # Example: "--out-format=checkstyle:report.xml,json:stdout,colored-line-number"
+  # The CLI flag (`--out-format`) override the configuration file.
+  #
+  # Default:
+  #     formats:
+  #       - format: colored-line-number
+  #         path: stdout
+  formats:
+    #    - format: json
+    #      path: stderr
+    #    - format: checkstyle
+    #      path: report.xml
+    - format: colored-line-number
+      path: stdout
+  # Print lines of code with issue.
+  # Default: true
+  print-issued-lines: true
+  # Print linter name in the end of issue text.
+  # Default: true
+  print-linter-name: true
+  # Add a prefix to the output file references.
+  # Default: ""
+  path-prefix: ""
+  # Sort results by the order defined in `sort-order`.
+  # Default: false
+  sort-results: true
+  # Order to use when sorting results.
+  # Require `sort-results` to `true`.
+  # Possible values: `file`, `linter`, and `severity`.
+  #
+  # If the severity values are inside the following list, they are ordered in this order:
+  #   1. error
+  #   2. warning
+  #   3. high
+  #   4. medium
+  #   5. low
+  # Either they are sorted alphabetically.
+  #
+  # Default: ["file"]
+  sort-order:
+    - linter
+    - severity
+    - file # filepath, line, and column.
+  # Show statistics per linter.
+  # Default: false
+  show-stats: true
+# Options for analysis running.
+run:
+  # Timeout for analysis, e.g. 30s, 5m.
+  # Default: 1m
+  timeout: 30s
+  # Exit code when at least one issue was found.
+  # Default: 1
+  issues-exit-code: 1
+  # Include test files or not.
+  # Default: true
+  tests: false
+  # If set, we pass it to "go list -mod={option}". From "go help modules":
+  # If invoked with -mod=readonly, the go command is disallowed from the implicit
+  # automatic updating of go.mod described above. Instead, it fails when any changes
+  # to go.mod are needed. This setting is most useful to check that go.mod does
+  # not need updates, such as in a continuous integration and testing system.
+  # If invoked with -mod=vendor, the go command assumes that the vendor
+  # directory holds the correct copies of dependencies and ignores
+  # the dependency descriptions in go.mod.
+  #
+  # Allowed values: readonly|vendor|mod
+  # Default: ""
+  modules-download-mode: readonly
+  # Allow multiple parallel golangci-lint instances running.
+  # If false, golangci-lint acquires file lock on start.
+  # Default: false
+  allow-parallel-runners: false
+  # Allow multiple golangci-lint instances running, but serialize them around a lock.
+  # If false, golangci-lint exits with an error if it fails to acquire file lock on start.
+  # Default: false
+  allow-serial-runners: false
+  # Number of operating system threads (`GOMAXPROCS`) that can execute golangci-lint simultaneously.
+  # If it is explicitly set to 0 (i.e. not the default) then golangci-lint will automatically set the value to match Linux container CPU quota.
+  # Default: the number of logical CPUs in the machine
+  concurrency: 0
+severity:
+  # Set the default severity for issues.
+  #
+  # If severity rules are defined and the issues do not match or no severity is provided to the rule
+  # this will be the default severity applied.
+  # Severities should match the supported severity names of the selected out format.
+  # - Code climate: https://docs.codeclimate.com/docs/issues#issue-severity
+  # - Checkstyle: https://checkstyle.sourceforge.io/property_types.html#SeverityLevel
+  # - GitHub: https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-error-message
+  # - TeamCity: https://www.jetbrains.com/help/teamcity/service-messages.html#Inspection+Instance
+  #
+  # `@linter` can be used as severity value to keep the severity from linters (e.g. revive, gosec, ...)
+  #
+  # Default: ""
+  default-severity: warn
+  # If set to true `severity-rules` regular expressions become case-sensitive.
+  # Default: false
+  case-sensitive: true
+  # When a list of severity rules are provided, severity information will be added to lint issues.
+  # Severity rules have the same filtering capability as exclude rules
+  # except you are allowed to specify one matcher per severity rule.
+  #
+  # `@linter` can be used as severity value to keep the severity from linters (e.g. revive, gosec, ...)
+  #
+  # Only affects out formats that support setting severity information.
+  #
+  # Default: []
+  rules:
+    - linters:
+        - dupl
+      severity: info
+linters-settings:
+  exhaustive:
+    # Presence of "default" case in switch statements satisfies exhaustiveness,
+    # even if all enum members are not listed.
+    # Default: false
+    default-signifies-exhaustive: true
+  funlen:
+    # Checks the number of lines in a function.
+    # If lower than 0, disable the check.
+    # Default: 60
+    lines: 80
+    # Checks the number of statements in a function.
+    # If lower than 0, disable the check.
+    # Default: 40
+    statements: -1
+    # Ignore comments when counting lines.
+    # Default false
+    ignore-comments: true
+  goconst:
+    # Minimal length of string constant.
+    # Default: 3
+    min-len: 2
+    # Minimum occurrences of constant string count to trigger issue.
+    # Default: 3
+    min-occurrences: 3
+    # Ignore test files.
+    # Default: false
+    ignore-tests: true
+    # Look for existing constants matching the values.
+    # Default: true
+    match-constant: true
+    # Search also for duplicated numbers.
+    # Default: false
+    numbers: true
+    # Minimum value, only works with goconst.numbers
+    # Default: 3
+    min: 2
+    # Maximum value, only works with goconst.numbers
+    # Default: 3
+    max: 2
+    # Ignore when constant is not used as function argument.
+    # Default: true
+    ignore-calls: true
+    # Exclude strings matching the given regular expression.
+    # Default: ""
+    ignore-strings: 'foo.+'
+  gocyclo:
+    # Maximal code complexity to report.
+    # Default: 30 (but we recommend 10-20)
+    min-complexity: 20
+  gocognit:
+    # Minimal code complexity to report.
+    # Default: 30 (but we recommend 10-20)
+    min-complexity: 20
+  godot:
+    # Comments to be checked: `declarations`, `toplevel`, or `all`.
+    # Default: declarations
+    scope: declarations
+    # List of regexps for excluding particular comment lines from check.
+    # Default: []
+    exclude:
+      # Exclude todo and fixme comments.
+      - "^fixme:"
+      - "^todo:"
+    # Check that each sentence ends with a period.
+    # Default: true
+    period: true
+    # Check that each sentence starts with a capital letter.
+    # Default: false
+    capital: false
+  gosec:
+    # To select a subset of rules to run.
+    # Available rules: https://github.com/securego/gosec#available-rules
+    # Default: [] - means include all rules
+    includes: []
+    # To specify a set of rules to explicitly exclude.
+    # Available rules: https://github.com/securego/gosec#available-rules
+    # Default: []
+    excludes:
+      - G101 # Look for hard coded credentials
+      - G102 # Bind to all interfaces
+      - G115 # Potential integer overflow when converting between integer types
+    # Exclude generated files
+    # Default: false
+    exclude-generated: true
+    # Filter out the issues with a lower severity than the given value.
+    # Valid options are: low, medium, high.
+    # Default: low
+    severity: medium
+    # Filter out the issues with a lower confidence than the given value.
+    # Valid options are: low, medium, high.
+    # Default: low
+    confidence: medium
+    # Concurrency value.
+    # Default: the number of logical CPUs usable by the current process.
+    concurrency: 6
+    # To specify the configuration of rules.
+    config:
+      # Globals are applicable to all rules.
+      global:
+        # If true, ignore #nosec in comments (and an alternative as well).
+        # Default: false
+        nosec: false
+        # Add an alternative comment prefix to #nosec (both will work at the same time).
+        # Default: ""
+        "#nosec": "#my-custom-nosec"
+        # Define whether nosec issues are counted as finding or not.
+        # Default: false
+        show-ignored: true
+        # Audit mode enables addition checks that for normal code analysis might be too nosy.
+        # Default: false
+        audit: true
+      G104:
+        fmt:
+          - Fscanf
+      G111:
+        # Regexp pattern to find potential directory traversal.
+        # Default: "http\\.Dir\\(\"\\/\"\\)|http\\.Dir\\('\\/'\\)"
+        pattern: "custom\\.Dir\\(\\)"
+      # Maximum allowed permissions mode for os.Mkdir and os.MkdirAll
+      # Default: "0750"
+      G301: "0750"
+      # Maximum allowed permissions mode for os.OpenFile and os.Chmod
+      # Default: "0600"
+      G302: "0600"
+      # Maximum allowed permissions mode for os.WriteFile and ioutil.WriteFile
+      # Default: "0600"
+      G306: "0600"
+  varnamelen:
+    # The longest distance, in source lines, that is being considered a "small scope".
+    # Variables used in at most this many lines will be ignored.
+    # Default: 5
+    max-distance: 6
+    # The minimum length of a variable's name that is considered "long".
+    # Variable names that are at least this long will be ignored.
+    # Default: 3
+    min-name-length: 2
+    # Check method receivers.
+    # Default: false
+    check-receiver: true
+    # Check named return values.
+    # Default: false
+    check-return: true
+    # Check type parameters.
+    # Default: false
+    check-type-param: true
+    # Ignore "ok" variables that hold the bool return value of a type assertion.
+    # Default: false
+    ignore-type-assert-ok: true
+    # Ignore "ok" variables that hold the bool return value of a map index.
+    # Default: false
+    ignore-map-index-ok: true
+    # Ignore "ok" variables that hold the bool return value of a channel receive.
+    # Default: false
+    ignore-chan-recv-ok: true
+    # Optional list of variable names that should be ignored completely.
+    # Default: []
+    ignore-names:
+      - r
+      - n
+      - err
+    # Optional list of variable declarations that should be ignored completely.
+    # Entries must be in one of the following forms (see below for examples):
+    # - for variables, parameters, named return values, method receivers, or type parameters:
+    #   <name> <type>  (<type> can also be a pointer/slice/map/chan/...)
+    # - for constants: const <name>
+    #
+    # Default: []
+    ignore-decls:
+      - c echo.Context
+      - t testing.T
+      - f *foo.Bar
+      - e error
+      - i int
+      - const C
+      - T any
+      - m map[string]int
+      - r recover
+      - c *client
+      - b *Buffer
+      - h *Header
+      - c Config
+      - c *clusterClient
+      - s *Server
+  whitespace:
+    # Enforces newlines (or comments) after every multi-line if statement.
+    # Default: false
+    multi-if: true
+    # Enforces newlines (or comments) after every multi-line function signature.
+    # Default: false
+    multi-func: true
+  lll:
+    # Max line length, lines longer will be reported.
+    # '\t' is counted as 1 character by default, and can be changed with the tab-width option.
+    # Default: 120.
+    line-length: 120
+    # Tab width in spaces.
+    # Default: 1
+    tab-width: 1
+  nlreturn:
+    # Size of the block (including return statement that is still "OK")
+    # so no return split required.
+    # Default: 1
+    block-size: 2
+  interfacebloat:
+    # The maximum number of methods allowed for an interface.
+    # Default: 10
+    max: 10
+  cyclop:
+    # The maximal code complexity to report.
+    # Default: 10
+    max-complexity: 20
+    # The maximal average package complexity.
+    # If it's higher than 0.0 (float) the check is enabled
+    # Default: 0.0
+    package-average: 0.0
+    # Should ignore tests.
+    # Default: false
+    skip-tests: true
+  importas:
+    # Do not allow unaliased imports of aliased packages.
+    # Default: false
+    no-unaliased: false
+    # Do not allow non-required aliases.
+    # Default: false
+    no-extra-aliases: true
+    # List of aliases
+    # Default: []
+    alias:
+      # An explicit empty alias can be used to ensure no aliases are used for a package.
+      # This can be useful if `no-extra-aliases: true` doesn't fit your need.
+      # Multiple packages can use an empty alias.
+      - pkg: errors
+        alias: ""
+      - pkg: "git.woa.com/bk-gse/bk-gse-sdk/internal/agent/domain-socket"
+        alias: "domainsocket"
+      - pkg: "git.woa.com/bk-gse/bk-gse-sdk/service/agent-message"
+        alias: "agentmessage"
+      - pkg: "git.woa.com/bk-gse/bk-gse-sdk/service/server-api"
+        alias: "serverapi"

@@ -1,0 +1,6 @@
+{
+    "plugin_name": "sdk_test",
+    "plugin_version": "v1.0.0",
+    "domain_socket_path": "/var/run/gse2/agent/ipc.state.message",
+    "pid_file": "/var/run/gse2/agent_message_example.pid"
+}
