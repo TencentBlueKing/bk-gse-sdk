@@ -15,7 +15,7 @@
 
 package serverapi
 
-import "git.woa.com/bk-gse/bk-gse-sdk/types"
+import "github.com/TencentBlueKing/bk-gse-sdk/go/types"
 
 // ClusterPluginDispatchMessageResp describes the response of Cluster DispatchMessage.
 type ClusterPluginDispatchMessageResp struct {

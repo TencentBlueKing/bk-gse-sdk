@@ -614,9 +614,9 @@ linters-settings:
       # Multiple packages can use an empty alias.
       - pkg: errors
         alias: ""
-      - pkg: "git.woa.com/bk-gse/bk-gse-sdk/internal/agent/domain-socket"
+      - pkg: "github.com/TencentBlueKing/bk-gse-sdk/go/internal/agent/domain-socket"
         alias: "domainsocket"
-      - pkg: "git.woa.com/bk-gse/bk-gse-sdk/service/agent-message"
+      - pkg: "github.com/TencentBlueKing/bk-gse-sdk/go/service/agent-message"
         alias: "agentmessage"
-      - pkg: "git.woa.com/bk-gse/bk-gse-sdk/service/server-api"
+      - pkg: "github.com/TencentBlueKing/bk-gse-sdk/go/service/server-api"
         alias: "serverapi"
