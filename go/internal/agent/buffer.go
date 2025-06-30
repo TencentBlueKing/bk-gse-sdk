@@ -29,6 +29,13 @@ type Buffer struct {
 	pos, limit, capacity uint32
 }
 
+const (
+	lenUint8  = 1
+	lenUint16 = 2
+	lenUint32 = 4
+	lenUint64 = 8
+)
+
 // NewBuffer creates a new Buffer instance with capacity base on tcp connection.
 func NewBuffer(conn net.Conn, capacity uint32) *Buffer {
 	return &Buffer{

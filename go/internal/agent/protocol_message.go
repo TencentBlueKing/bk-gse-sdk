@@ -20,18 +20,11 @@ import (
 	"fmt"
 )
 
-// Header describes the common header of protocol.
-type Header struct {
-	Magic        uint32
-	ProtoType    uint16
-	ProtoVersion uint16
-	Sequence     uint64
-	Length       uint32
-	Reserved0    uint32
-	Reserved1    uint32
-}
-
 const (
+	/*
+	 * Base Message Protocol
+	 */
+
 	// ProtoTypeKeepaliveReq defines the proto type of keepalive request.
 	ProtoTypeKeepaliveReq = 0x9006
 
@@ -45,21 +38,40 @@ const (
 	ProtoTypeRespondMessage = 0x900a
 )
 
+// NewMessageHeader creates a new header.
+func NewMessageHeader() *MessageHeader {
+	return &MessageHeader{
+		Magic:        magicNumber,
+		ProtoVersion: messageProtoVersion,
+	}
+}
+
+// MessageHeader describes the message header of protocol.
+type MessageHeader struct {
+	Magic        uint32
+	ProtoType    uint16
+	ProtoVersion uint16
+	Sequence     uint64
+	Length       uint32
+	Reserved0    uint32
+	Reserved1    uint32
+}
+
 const (
 	// magic number of header.
 	magicNumber = 0xdeadbeef
 
 	// version of protocol.
-	protoVersion = 0x6
-
-	lenUint8  = 1
-	lenUint16 = 2
-	lenUint32 = 4
-	lenUint64 = 8
+	messageProtoVersion = 0x6
 )
 
+// NewHeader creates a new header.
+func (h *MessageHeader) NewHeader() IHeader {
+	return NewMessageHeader()
+}
+
 // HeaderLength returns the length of header.
-func (h *Header) HeaderLength() uint32 {
+func (h *MessageHeader) HeaderLength() uint32 {
 	return lenUint32 +
 		lenUint16 +
 		lenUint16 +
@@ -69,8 +81,13 @@ func (h *Header) HeaderLength() uint32 {
 		lenUint32
 }
 
+// TotalLength returns the length of total protocol, header + body.
+func (h *MessageHeader) TotalLength() uint32 {
+	return h.Length
+}
+
 // ReadBuffer reads the header from buffer.
-func (h *Header) ReadBuffer(buf *Buffer) error {
+func (h *MessageHeader) ReadBuffer(buf *Buffer) error {
 	var err error
 
 	if h.Magic, err = buf.DecodeUint32(); err != nil {
@@ -109,7 +126,7 @@ func (h *Header) ReadBuffer(buf *Buffer) error {
 }
 
 // EncodeBuffer encodes the header to buffer.
-func (h *Header) EncodeBuffer() ([]byte, error) {
+func (h *MessageHeader) EncodeBuffer() ([]byte, error) {
 	buffer := make([]byte, h.HeaderLength())
 
 	binary.BigEndian.PutUint32(buffer, magicNumber)

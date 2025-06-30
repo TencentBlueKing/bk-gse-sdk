@@ -13,56 +13,46 @@
  * of the project delivered to anyone in the future.
  */
 
-package serverapi
+package agentreport
 
 import (
-	"net/http"
+	"time"
 
-	"github.com/TencentBlueKing/bk-gse-sdk/go/internal"
 	"github.com/TencentBlueKing/bk-gse-sdk/go/types"
 )
 
 // OptionFn defines the function type for setting options.
 type OptionFn func(*Config)
 
-// WithBaseHeader sets the base header to add to requests.
-func WithBaseHeader(header http.Header) OptionFn {
+// WithDomainSocketPath sets the domain socket path.
+func WithDomainSocketPath(path string) OptionFn {
 	return func(c *Config) {
-		c.BaseHeader = internal.CopyHeaders(header)
+		c.DomainSocketPath = path
 	}
 }
 
-// WithBaseURL sets the base URL of the server.
-func WithBaseURL(url string) OptionFn {
+// WithLocalSocketPort sets the socket port on windows.
+func WithLocalSocketPort(port uint) OptionFn {
 	return func(c *Config) {
-		c.BaseURL = url
+		c.LocalSocketPort = port
 	}
 }
 
-// WithClient sets the HTTP client to use for requests.
-func WithClient(client *http.Client) OptionFn {
+// WithReconnectInterval sets the reconnect interval.
+func WithReconnectInterval(interval time.Duration) OptionFn {
 	return func(c *Config) {
-		c.Client = client
+		c.ReconnectInterval = interval
 	}
 }
 
-// WithClusterAuth sets the cluster auth.
-func WithClusterAuth(slotID int, token string) OptionFn {
+// WithKeepaliveInterval sets the keepalive interval.
+func WithKeepaliveInterval(interval time.Duration) OptionFn {
 	return func(c *Config) {
-		c.SlotID = slotID
-		c.Token = token
+		c.KeepaliveInterval = interval
 	}
 }
 
-// WithAPIGwAuth sets the api gw auth.
-func WithAPIGwAuth(appCode, appSecret string) OptionFn {
-	return func(c *Config) {
-		c.AppCode = appCode
-		c.AppSecret = appSecret
-	}
-}
-
-// WithLogger sets the logger to use for requests.
+// WithLogger sets the logger.
 func WithLogger(logger types.Logger) OptionFn {
 	return func(c *Config) {
 		c.Logger = logger

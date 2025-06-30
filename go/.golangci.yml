@@ -560,7 +560,9 @@ linters-settings:
       - r recover
       - c *client
       - b *Buffer
-      - h *Header
+      - h *MessageHeader
+      - h *DataUpHeader
+      - h *DataDownHeader
       - c Config
       - c *clusterClient
       - s *Server
@@ -620,3 +622,5 @@ linters-settings:
         alias: "agentmessage"
       - pkg: "github.com/TencentBlueKing/bk-gse-sdk/go/service/server-api"
         alias: "serverapi"
+      - pkg: "github.com/TencentBlueKing/bk-gse-sdk/go/service/agent-report"
+        alias: "agentreport"

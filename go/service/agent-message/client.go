@@ -66,10 +66,11 @@ func New(opts ...OptionFn) (Client, error) {
 		PluginName:          conf.PluginName,
 		ReconnectInterval:   conf.ReconnectInterval,
 		MaxMessageSizeBytes: conf.MaxMessageSizeBytes,
-		RecvCallback: func(header agent.Header, content []byte) {
+		RecvCallback: func(header agent.IHeader, content []byte) {
 			c.handleReceive(header, content)
 		},
-		Logger: conf.Logger,
+		RecvHeader: agent.NewMessageHeader(),
+		Logger:     conf.Logger,
 	})
 
 	return c, nil
@@ -142,12 +143,12 @@ func (c *client) sendMessage(ctx context.Context, messageID string, content []by
 		return err
 	}
 
-	header := agent.Header{
-		ProtoType: agent.ProtoTypeRespondMessage,
-		Sequence:  internal.GenerateSequence(),
-		Reserved0: uint32(len(info)),
-		Reserved1: uint32(len(content)),
-	}
+	header := agent.NewMessageHeader()
+	header.ProtoType = agent.ProtoTypeRespondMessage
+	header.Sequence = internal.GenerateSequence()
+	header.Length = uint32(len(content)) + header.HeaderLength()
+	header.Reserved0 = uint32(len(info))
+	header.Reserved1 = uint32(len(content))
 
 	buffer := make([]byte, len(info)+len(content))
 	copy(buffer, info)
@@ -163,7 +164,13 @@ func (c *client) sendMessage(ctx context.Context, messageID string, content []by
 	return nil
 }
 
-func (c *client) handleReceive(header agent.Header, content []byte) {
+func (c *client) handleReceive(recvHeader agent.IHeader, content []byte) {
+	header, ok := recvHeader.(*agent.MessageHeader)
+	if !ok {
+		c.conf.Logger.Warn("received unknown header: %v", recvHeader)
+		return
+	}
+
 	switch header.ProtoType {
 	case agent.ProtoTypeKeepaliveResp:
 		go c.handleKeepaliveResp(header, content)
@@ -176,7 +183,7 @@ func (c *client) handleReceive(header agent.Header, content []byte) {
 	}
 }
 
-func (c *client) handleKeepaliveResp(_ agent.Header, content []byte) {
+func (c *client) handleKeepaliveResp(_ *agent.MessageHeader, content []byte) {
 	var resp agent.KeepaliveResp
 	if err := json.Unmarshal(content, &resp); err != nil {
 		c.conf.Logger.Warn("unmarshal keepalive response failed: %v", err)
@@ -185,9 +192,11 @@ func (c *client) handleKeepaliveResp(_ agent.Header, content []byte) {
 
 	c.mutex.Lock()
 	c.agentInfo = types.AgentInfo{
-		AgentID:    resp.AgentID,
+		AgentSimpleInfo: types.AgentSimpleInfo{
+			CloudID: resp.CloudID,
+			AgentID: resp.AgentID,
+		},
 		Version:    resp.Version,
-		CloudID:    resp.CloudID,
 		RunMode:    resp.RunMode,
 		StatusCode: types.AgentStatus(resp.StatusCode),
 		Status:     resp.Status,
@@ -199,7 +208,7 @@ func (c *client) handleKeepaliveResp(_ agent.Header, content []byte) {
 	c.conf.Logger.Debug("received keepalive response: %v", resp)
 }
 
-func (c *client) handleDispatchMessage(header agent.Header, content []byte) {
+func (c *client) handleDispatchMessage(header *agent.MessageHeader, content []byte) {
 	infoLen := header.Reserved0
 	dataLen := header.Reserved1
 
@@ -244,10 +253,10 @@ func (c *client) holdKeepalive() {
 				continue
 			}
 
-			header := agent.Header{
-				ProtoType: agent.ProtoTypeKeepaliveReq,
-				Sequence:  internal.GenerateSequence(),
-			}
+			header := agent.NewMessageHeader()
+			header.ProtoType = agent.ProtoTypeKeepaliveReq
+			header.Sequence = internal.GenerateSequence()
+			header.Length = uint32(len(buf)) + header.HeaderLength()
 
 			if err = c.client.SendMessage(context.Background(), header, buf); err != nil {
 				c.conf.Logger.Warn("send keepalive request failed: %v", err)
