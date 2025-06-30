@@ -48,11 +48,17 @@ const (
 	AgentStatusUninit AgentStatus = 7
 )
 
+// AgentSimpleInfo describes the simple agent info.
+type AgentSimpleInfo struct {
+	CloudID int
+	AgentID string
+}
+
 // AgentInfo describes the agent info.
 type AgentInfo struct {
-	AgentID    string
+	AgentSimpleInfo
+
 	Version    string
-	CloudID    int
 	RunMode    int
 	StatusCode AgentStatus
 	Status     string

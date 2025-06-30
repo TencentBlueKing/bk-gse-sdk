@@ -38,7 +38,7 @@ type Client interface {
 	IsConnected() bool
 
 	// SendMessage sends a message respond to server though agent.
-	SendMessage(ctx context.Context, header Header, content []byte) error
+	SendMessage(ctx context.Context, header IHeader, content []byte) error
 }
 
 // New creates a new client.
@@ -106,7 +106,7 @@ func (c *client) IsConnected() bool {
 }
 
 // SendMessage sends a message respond to server though agent.
-func (c *client) SendMessage(_ context.Context, header Header, content []byte) error {
+func (c *client) SendMessage(_ context.Context, header IHeader, content []byte) error {
 	if !c.launched.Load() {
 		return types.ErrNotLaunched()
 	}
@@ -123,8 +123,6 @@ func (c *client) SendMessage(_ context.Context, header Header, content []byte) e
 		return types.NotConnected()
 	}
 
-	header.ProtoVersion = protoVersion
-	header.Length = uint32(len(content)) + header.HeaderLength()
 	headerBuf, err := header.EncodeBuffer()
 	if err != nil {
 		return err
@@ -217,17 +215,17 @@ func (c *client) handleReceive(conn net.Conn) error {
 	for {
 		buffer := NewBuffer(conn, c.conf.MaxMessageSizeBytes)
 
-		var header Header
+		header := c.conf.RecvHeader.NewHeader()
 		if err := header.ReadBuffer(buffer); err != nil {
 			return err
 		}
 
-		if header.Length < header.HeaderLength() {
+		if header.TotalLength() < header.HeaderLength() {
 			return types.ErrInvalidProtocol()
 		}
 
 		var raw []byte
-		if raw, err = buffer.DecodeBytes(header.Length - header.HeaderLength()); err != nil {
+		if raw, err = buffer.DecodeBytes(header.TotalLength() - header.HeaderLength()); err != nil {
 			return err
 		}
 

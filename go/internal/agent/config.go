@@ -42,10 +42,13 @@ type Config struct {
 	// RecvCallback describes the callback function for agent message service to call when receive a message.
 	RecvCallback Callback
 
+	// RecvHeader describes the header for agent message service to call when receive a message.
+	RecvHeader IHeader
+
 	// Logger describes the logger for this service.
 	// default logger will prints to stdout.
 	Logger types.Logger
 }
 
 // Callback describes the callback function for agent message service to call when receive a message.
-type Callback func(header Header, content []byte)
+type Callback func(header IHeader, content []byte)

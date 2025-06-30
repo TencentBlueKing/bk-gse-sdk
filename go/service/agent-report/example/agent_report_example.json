@@ -1,0 +1,4 @@
+{
+    "data_id": 1000,
+    "domain_socket_path": "/var/run/gse2/agent/ipc.state.report"
+}

@@ -13,7 +13,7 @@
  * of the project delivered to anyone in the future.
  */
 
-package agentmessage
+package agentreport
 
 import (
 	"errors"
@@ -22,16 +22,14 @@ import (
 	"github.com/TencentBlueKing/bk-gse-sdk/go/types"
 )
 
-// NewDefaultConfig creates a default configuration for agent-message service.
+// NewDefaultConfig creates a default configuration for agent-report service.
 func NewDefaultConfig() *Config {
 	return &Config{
 		DomainSocketPath:    "",
 		LocalSocketPort:     0,
-		PluginName:          "",
 		ReconnectInterval:   defaultReconnectInterval,
 		KeepaliveInterval:   defaultKeepaliveInterval,
 		MaxMessageSizeBytes: defaultMaxMessageSizeBytes,
-		RecvCallback:        func(string, []byte) {},
 		Logger:              types.NewDefaultLogger(defaultLoggerLevel),
 	}
 }
@@ -43,20 +41,13 @@ const (
 	defaultLoggerLevel         = 1 // INFO
 )
 
-// Config defines the configuration for agent-message service.
+// Config defines the configuration for agent-report service.
 type Config struct {
-	// DomainSocketPath describes the agent message domain socket path on unix machine.
+	// DomainSocketPath describes the agent report domain socket path on unix machine.
 	DomainSocketPath string
 
-	// LocalSocketPort describes the agent message socket port on windows machine.
+	// LocalSocketPort describes the agent report socket port on windows machine.
 	LocalSocketPort uint
-
-	// PluginName describes the plugin's name who is using this SDK.
-	// plugin name will be used to do authority and identify which server to send message to.
-	PluginName string
-
-	// PluginVersion describes the plugin's version who is using this SDK.
-	PluginVersion string
 
 	// ReconnectInterval describes the reconnect interval when connection lost.
 	ReconnectInterval time.Duration
@@ -67,21 +58,14 @@ type Config struct {
 	// MaxMessageSizeBytes describes the max message size in bytes.
 	MaxMessageSizeBytes uint32
 
-	// RecvCallback describes the callback function for agent message service to call when receive a message.
-	RecvCallback Callback
-
 	// Logger describes the logger for this service.
 	Logger types.Logger
 }
 
 // Validate validates the configuration.
 func (c Config) Validate() error {
-	if c.PluginName == "" {
-		return errors.Join(types.ErrInvalidConfig(), errors.New("plugin name is empty"))
-	}
-
-	if c.PluginVersion == "" {
-		return errors.Join(types.ErrInvalidConfig(), errors.New("plugin version is empty"))
+	if c.DomainSocketPath == "" && c.LocalSocketPort == 0 {
+		return errors.Join(types.ErrInvalidConfig(), errors.New("socket path and socket port are both invalid"))
 	}
 
 	if c.ReconnectInterval == 0 {
@@ -90,10 +74,6 @@ func (c Config) Validate() error {
 
 	if c.KeepaliveInterval == 0 {
 		return errors.Join(types.ErrInvalidConfig(), errors.New("keepalive interval is 0"))
-	}
-
-	if c.RecvCallback == nil {
-		return errors.Join(types.ErrInvalidConfig(), errors.New("recv callback function is empty"))
 	}
 
 	if c.Logger == nil {
