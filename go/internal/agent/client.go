@@ -115,14 +115,6 @@ func (c *client) SendMessage(_ context.Context, header IHeader, content []byte) 
 		return types.NotConnected()
 	}
 
-	c.mutex.Lock()
-	conn := c.conn
-	c.mutex.Unlock()
-
-	if conn == nil {
-		return types.NotConnected()
-	}
-
 	headerBuf, err := header.EncodeBuffer()
 	if err != nil {
 		return err
@@ -132,7 +124,14 @@ func (c *client) SendMessage(_ context.Context, header IHeader, content []byte) 
 	copy(buffer, headerBuf)
 	copy(buffer[len(headerBuf):], content)
 
-	if _, err := conn.Write(buffer); err != nil {
+	c.mutex.Lock()
+	defer c.mutex.Unlock()
+
+	if c.conn == nil {
+		return types.NotConnected()
+	}
+
+	if _, err := c.conn.Write(buffer); err != nil {
 		return err
 	}
 
