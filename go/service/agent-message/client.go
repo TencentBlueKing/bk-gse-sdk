@@ -146,7 +146,7 @@ func (c *client) sendMessage(ctx context.Context, messageID string, content []by
 	header := agent.NewMessageHeader()
 	header.ProtoType = agent.ProtoTypeRespondMessage
 	header.Sequence = internal.GenerateSequence()
-	header.Length = uint32(len(content)) + header.HeaderLength()
+	header.Length = uint32(len(content)) + uint32(len(info)) + header.HeaderLength()
 	header.Reserved0 = uint32(len(info))
 	header.Reserved1 = uint32(len(content))
 
