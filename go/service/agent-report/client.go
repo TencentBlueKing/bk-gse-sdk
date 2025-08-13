@@ -53,7 +53,10 @@ func New(opts ...OptionFn) (Client, error) {
 		return nil, err
 	}
 
-	c := &client{conf: conf}
+	c := &client{
+		conf: conf,
+		done: make(chan struct{}),
+	}
 	c.client = agent.New(agent.Config{
 		DomainSocketPath:    conf.DomainSocketPath,
 		LocalSocketPort:     conf.LocalSocketPort,
